@@ -19,8 +19,10 @@ app.use(cookieParser());
 
 
 
+const dburl = "mongodb+srv://dbuser:" + process.env.DB_KEY + "@cluster0.wlcf1.mongodb.net/database?retryWrites=true&w=majority"
+
 // database connection
-mongoose.connect('mongodb://localhost:27017/wetten', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(dburl, {useNewUrlParser: true, useUnifiedTopology: true});
 
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 
