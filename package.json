@@ -4,7 +4,7 @@
   "description": "",
   "main": "bin/www",
   "scripts": {
-    "start": "npm start bin/www",
+    "start": "node bin/www",
     "nodemon": "nodemon bin/www"
   },
   "author": "",
