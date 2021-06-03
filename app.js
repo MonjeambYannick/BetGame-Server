@@ -16,13 +16,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
-
-
-
 const dburl = "mongodb+srv://dbuser:" + process.env.DB_KEY + "@cluster0.wlcf1.mongodb.net/database?retryWrites=true&w=majority"
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
 // database connection
-mongoose.connect(dburl, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(dburl);
 
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 
@@ -30,6 +32,7 @@ mongoose.connection.on('error', console.error.bind(console, 'connection error:')
 // import routes
 const auth = require('./routes/auth')
 const api = require('./routes/api')
+const fapi = require('./routes/fapi')
 
 // middleware
 const tokenmiddleware = require('./middleware/token-middleware')
@@ -38,28 +41,26 @@ const tokenmiddleware = require('./middleware/token-middleware')
 // routes
 app.use('/auth', auth)
 app.use('/api', tokenmiddleware, api)
-
-
-
+app.use('/fapi', fapi)
 
 
 
 /******************************/
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+    next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;

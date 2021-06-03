@@ -1,5 +1,5 @@
 require('dotenv').config()
-var mongoose = require('mongoose') 
+var mongoose = require('mongoose')
 
 var userschema = new mongoose.Schema(
     {
@@ -14,37 +14,40 @@ var userschema = new mongoose.Schema(
         email: {
             type: String,
             required: true
-        }
+        },
+        groups: [
+            { type: String, required: false }
+        ]
     }
 )
 
 let usermodel = mongoose.model('user', userschema);
 
-let AddNewToDB = (param) => {
-    
+let AddNewUser = (param) => {
+
     return new Promise((resolve, reject) => {
 
         let model = new usermodel(param)
         model.save(function (err, data) {
-            if(err) return reject(err);
+            if (err) return reject(err);
             return resolve(data);
         })
     })
 }
 
-let GetFromDB = async (queryparameter) => {
+let GetUser = async (queryparameter) => {
 
     return new Promise((resolve, reject) => {
 
         let query = usermodel.find(queryparameter)
-        query.exec(function(err, data) {
-            if(err) {
+        query.exec(function (err, data) {
+            if (err) {
                 return reject(err)
-            }            
+            }
             return resolve(data);
         })
     })
 
 }
 
-module.exports = {AddNewToDB, GetFromDB} 
+module.exports = { AddNewUser, GetUser }
